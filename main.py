@@ -4529,7 +4529,18 @@ class NewsAnalyzer:
             results, id_to_name, failed_ids = self._crawl_data()
 
             self._execute_mode_strategy(mode_strategy, results, id_to_name, failed_ids)
-
+            
+            # 获取当前生成的TXT文件路径（与生成时的路径一致）
+            current_txt_filename = f"{format_time_filename()}.txt"
+            current_txt_path = get_output_path("txt", current_txt_filename)
+            
+            # 定义latest.txt路径
+            latest_txt_path = os.path.join("output", "latest.txt")
+            
+            # 复制内容到latest.txt
+            with open(current_txt_path, "r", encoding="utf-8") as src, \
+                 open(latest_txt_path, "w", encoding="utf-8") as dst:
+                dst.write(src.read())
         except Exception as e:
             print(f"分析流程执行出错: {e}")
             raise
